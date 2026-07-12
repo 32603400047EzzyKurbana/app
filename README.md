@@ -350,5 +350,3 @@ InstanceWatch merupakan aplikasi monitoring dan manajemen Amazon EC2 berbasis we
 **NIM : 32602400047**
 
 **Mata Kuliah : Cloud Computing**
-
-**Universitas : Universitas Teknologi Yogyakarta**
