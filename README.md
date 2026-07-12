@@ -28,6 +28,22 @@ Aplikasi dibangun menggunakan:
 
 ---
 
+# 📷 Demo Aplikasi
+
+## Backend
+
+Backend berjalan pada `http://localhost:4000`.
+
+![Backend](ss/api.png)
+
+---
+
+## Dashboard InstanceWatch
+
+Frontend berjalan pada `http://localhost:5173`.
+
+![Dashboard](ss/tampilan.png)
+
 # Fitur Utama
 
 ✅ Menampilkan seluruh EC2 Instance pada akun AWS
