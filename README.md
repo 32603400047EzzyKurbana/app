@@ -1,77 +1,354 @@
 # InstanceWatch
-
-Dashboard monitoring & kontrol EC2 instance berbasis web — Tugas Besar (Individu) Cloud Computing.
+### ashboard monitoring & kontrol EC2 instance berbasis web — Tugas Besar (Individu) Cloud Computing.
 
 InstanceWatch menampilkan seluruh EC2 instance pada akun AWS kamu dalam bentuk kartu status
 real-time, lengkap dengan grafik CPU utilization, aksi start/stop/reboot/terminate, estimasi
 biaya berjalan, dan riwayat aktivitas.
 
-## Struktur Proyek
+
+**Nama : Ezzy Kurbana**  
+**NIM : 32602400047**  
+**Mata Kuliah : Cloud Computing**  
+**Tugas Besar (Individu)**
+
+---
+
+# Deskripsi Proyek
+
+InstanceWatch adalah aplikasi berbasis web yang dibuat untuk memantau dan mengelola Amazon EC2 Instance secara real-time menggunakan layanan Amazon Web Services (AWS).
+
+Aplikasi ini memungkinkan pengguna untuk melihat daftar seluruh EC2 Instance, memonitor status server, penggunaan CPU melalui Amazon CloudWatch, melakukan kontrol instance (Start, Stop, Reboot, dan Terminate), serta menghitung estimasi biaya penggunaan instance berdasarkan harga On-Demand AWS.
+
+Aplikasi dibangun menggunakan:
+
+- **Frontend** : React + Vite
+- **Backend** : Express.js (Node.js)
+- **Cloud Service** : Amazon EC2 & Amazon CloudWatch
+- **AWS SDK** : AWS SDK v3
+
+---
+
+# Fitur Utama
+
+✅ Menampilkan seluruh EC2 Instance pada akun AWS
+
+✅ Menampilkan informasi:
+
+- Nama Instance
+- Instance ID
+- Status Instance
+- Instance Type
+- Availability Zone
+- Public IP
+- Private IP
+
+✅ Monitoring CPU Utilization secara real-time menggunakan Amazon CloudWatch
+
+✅ Kontrol Instance:
+
+- Start Instance
+- Stop Instance
+- Reboot Instance
+- Terminate Instance
+
+✅ Estimasi biaya penggunaan:
+
+- Per Jam
+- Per Hari
+- Per Bulan
+
+✅ Riwayat aktivitas pengguna
+
+✅ Auto Refresh setiap 30 detik
+
+✅ Pencarian Instance berdasarkan Nama atau Instance ID
+
+✅ Filter Status Instance
+
+- Semua
+- Running
+- Stopped
+- Pending
+- Stopping
+
+---
+
+# Struktur Folder
 
 ```
 instancewatch/
-├── backend/          Express API + AWS SDK v3 (EC2, CloudWatch)
+│
+├── backend/
+│   ├── data/
+│   │   └── logs.json
+│   │
 │   ├── routes/
+│   │   └── instances.js
+│   │
 │   ├── services/
-│   ├── data/logs.json
+│   │   ├── cloudwatchService.js
+│   │   ├── costService.js
+│   │   └── ec2Service.js
+│   │
+│   ├── .env.example
+│   ├── package.json
 │   └── server.js
-├── frontend/         React (Vite) SPA
-│   └── src/
-└── README.md
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── vite.config.js
+│   └── package.json
+│
+├── README.md
+└── .gitignore
 ```
 
-## Prasyarat
+---
 
-- Node.js 18+ dan npm
-- Akun AWS dengan minimal 1 EC2 instance (bisa `t2.micro` free tier)
-- IAM user/role dengan izin: `ec2:DescribeInstances`, `ec2:StartInstances`,
-  `ec2:StopInstances`, `ec2:RebootInstances`, `ec2:TerminateInstances`,
-  `cloudwatch:GetMetricStatistics`
+# Persyaratan
 
-## Menjalankan Backend
+Sebelum menjalankan aplikasi, pastikan telah menginstall:
+
+- Node.js versi 18 atau lebih baru
+- npm
+- Akun AWS
+- Minimal memiliki 1 EC2 Instance
+- AWS IAM User dengan Access Key
+
+Permission IAM yang diperlukan:
+
+```
+ec2:DescribeInstances
+ec2:StartInstances
+ec2:StopInstances
+ec2:RebootInstances
+ec2:TerminateInstances
+cloudwatch:GetMetricStatistics
+```
+
+---
+
+# Konfigurasi AWS
+
+Salin file:
+
+```
+backend/.env.example
+```
+
+Menjadi
+
+```
+backend/.env
+```
+
+Kemudian isi seperti berikut:
+
+```env
+AWS_REGION=ap-southeast-2
+AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
+PORT=4000
+```
+
+> Jangan pernah mengunggah file `.env` ke GitHub karena berisi kredensial AWS.
+
+---
+
+# Menjalankan Backend
+
+Masuk ke folder backend
 
 ```bash
 cd backend
+```
+
+Install dependency
+
+```bash
 npm install
-cp .env.example .env
-# edit .env, isi AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+```
+
+Menjalankan server
+
+```bash
 npm start
 ```
 
-Backend berjalan di `http://localhost:4000`.
+Backend berjalan pada
 
-## Menjalankan Frontend
+```
+http://localhost:4000
+```
+
+---
+
+# Menjalankan Frontend
+
+Masuk ke folder frontend
 
 ```bash
 cd frontend
+```
+
+Install dependency
+
+```bash
 npm install
+```
+
+Jalankan aplikasi
+
+```bash
 npm run dev
 ```
 
-Frontend berjalan di `http://localhost:5173` dan otomatis mem-proxy `/api` ke backend
-(lihat `vite.config.js`).
+Frontend berjalan pada
 
-## Build untuk Produksi
-
-```bash
-cd frontend
-npm run build
+```
+http://localhost:5173
 ```
 
-Hasil build statis ada di `frontend/dist/`, bisa disajikan lewat server statis apa pun
-(atau digabungkan ke Express dengan `express.static`).
+---
 
-## Fitur
+# Endpoint API
 
-- Daftar semua EC2 instance beserta status, tipe, availability zone, IP publik/privat
-- Start, Stop, Reboot, Terminate instance (dengan dialog konfirmasi untuk aksi berisiko)
-- Grafik CPU utilization 60 menit terakhir per instance (via Amazon CloudWatch)
-- Pencarian dan filter berdasarkan status
-- Estimasi biaya on-demand (per jam/hari/bulan) dari instance yang sedang berjalan
-- Riwayat aktivitas (log aksi start/stop/reboot/terminate)
-- Auto-refresh setiap 30 detik
+## Health Check
 
-## Catatan Keamanan
+```
+GET /api/health
+```
 
-Jangan commit file `.env` (berisi kredensial AWS asli) ke GitHub — sudah termasuk dalam
-`.gitignore`. Gunakan `.env.example` sebagai referensi.
+Contoh Response
+
+```json
+{
+  "status": "ok",
+  "region": "ap-southeast-2"
+}
+```
+
+---
+
+## Daftar EC2
+
+```
+GET /api/instances
+```
+
+Response
+
+```json
+{
+  "instances": [
+    {
+      "id": "i-xxxxxxxx",
+      "name": "InstanceWatch",
+      "state": "running",
+      "type": "t3.micro"
+    }
+  ]
+}
+```
+
+---
+
+# Cara Menggunakan Aplikasi
+
+1. Jalankan Backend
+2. Jalankan Frontend
+3. Login ke AWS menggunakan Access Key pada file `.env`
+4. Dashboard akan otomatis menampilkan seluruh EC2 Instance
+5. Pilih Instance yang ingin dikelola
+6. Gunakan tombol:
+
+- Start
+- Stop
+- Reboot
+- Terminate
+
+7. Monitoring CPU dapat dilihat secara langsung melalui grafik CloudWatch.
+8. Estimasi biaya akan dihitung otomatis berdasarkan Instance yang sedang berjalan.
+
+---
+
+# Teknologi yang Digunakan
+
+## Frontend
+
+- React
+- Vite
+- CSS
+
+## Backend
+
+- Node.js
+- Express.js
+- AWS SDK v3
+
+## Cloud Service
+
+- Amazon EC2
+- Amazon CloudWatch
+
+---
+
+# Tampilan Aplikasi
+
+Dashboard menampilkan:
+
+- Informasi seluruh EC2 Instance
+- Monitoring CPU
+- Status Instance
+- Biaya penggunaan
+- Aktivitas terbaru
+
+---
+
+# Keamanan
+
+Untuk menjaga keamanan akun AWS:
+
+- File `.env` tidak boleh diunggah ke GitHub.
+- Gunakan `.env.example` sebagai contoh konfigurasi.
+- Simpan AWS Access Key dan Secret Key dengan aman.
+
+---
+
+# Hasil Pengujian
+
+Pengujian menunjukkan bahwa aplikasi berhasil:
+
+- Menghubungkan ke AWS
+- Menampilkan daftar EC2
+- Menampilkan status instance
+- Monitoring CPU melalui CloudWatch
+- Menjalankan aksi Start
+- Menjalankan aksi Stop
+- Menjalankan aksi Reboot
+- Menjalankan aksi Terminate
+- Menghitung estimasi biaya penggunaan
+
+---
+
+# Penutup
+
+InstanceWatch merupakan aplikasi monitoring dan manajemen Amazon EC2 berbasis web yang dibangun menggunakan React, Express.js, dan AWS SDK. Aplikasi ini memudahkan pengguna dalam memonitor kondisi instance secara real-time, melakukan kontrol server, serta memperkirakan biaya penggunaan layanan AWS dalam satu dashboard yang sederhana dan mudah digunakan.
+
+---
+
+## Identitas Penyusun
+
+**Nama : Ezzy Kurbana**
+
+**NIM : 32602400047**
+
+**Mata Kuliah : Cloud Computing**
+
+**Universitas : Universitas Teknologi Yogyakarta**
