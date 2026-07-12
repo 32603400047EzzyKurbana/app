@@ -1,5 +1,5 @@
 # InstanceWatch
-### ashboard monitoring & kontrol EC2 instance berbasis web — Tugas Besar (Individu) Cloud Computing.
+### Dashboard Monitoring & Kontrol Amazon EC2 Instance
 
 InstanceWatch menampilkan seluruh EC2 instance pada akun AWS kamu dalam bentuk kartu status
 real-time, lengkap dengan grafik CPU utilization, aksi start/stop/reboot/terminate, estimasi
