@@ -34,7 +34,7 @@ Aplikasi dibangun menggunakan:
 
 Backend berjalan pada `http://localhost:4000`.
 
-![Backend](ss/api.png)
+![Backend](backend/ss/api.png)
 
 ---
 
@@ -42,7 +42,7 @@ Backend berjalan pada `http://localhost:4000`.
 
 Frontend berjalan pada `http://localhost:5173`.
 
-![Dashboard](ss/tampilan.png)
+![Dashboard](backend/ss/tampilan.png)
 
 # Fitur Utama
 
